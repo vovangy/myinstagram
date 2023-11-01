@@ -1,9 +1,11 @@
 import React from 'react'
-import ReactDOM from 'react-dom/client'
+import {render} from 'react-dom'
 import App from './App.jsx'
+import { BrowserRouter } from 'react-router-dom'
 import Register from './Register.jsx'
 import './index.css'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-    <App />
-)
+render(
+      <App />,
+    document.getElementById('root')
+  )
