@@ -1,0 +1,18 @@
+.wrapper {
+    height: 100vh;
+}
+
+.login {
+    width: 300px;
+    height: min-content;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.loginTitle {
+    text-align: center;
+}
+
+.loginButton {
+    border: 10px;
+}

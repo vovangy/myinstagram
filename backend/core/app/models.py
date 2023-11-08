@@ -37,16 +37,10 @@ class User(AbstractUser, PermissionsMixin):
 
     photo_path = models.CharField(max_length=300, verbose_name="Путь до фото", null=True)
     rating = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Рейтинг", null=True)
-
-class Comment(models.Model):
-    content = models.TextField(max_length=5000)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    pub_date = models.DateField(auto_now_add=True)
-    is_deleted = models.BooleanField(default=False)
-
+    #Пагинация
 class Moment(models.Model):
     title = models.CharField(max_length=150)
-    content = models.TextField(max_length=5000)#is_deleted сделать
+    content = models.TextField(max_length=5000)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     pub_date = models.DateField(auto_now_add=True)
     photo_path = models.CharField(max_length=300, verbose_name="Путь до фото", null=True)
@@ -54,6 +48,13 @@ class Moment(models.Model):
 
     def __str__(self):
         return self.title
+
+class Comment(models.Model):
+    content = models.TextField(max_length=5000)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    moment_id = models.ForeignKey(Moment, on_delete=models.CASCADE)
+    pub_date = models.DateField(auto_now_add=True)
+    is_deleted = models.BooleanField(default=False)
 
 class LikeOnComment(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)

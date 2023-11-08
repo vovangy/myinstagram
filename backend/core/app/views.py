@@ -3,9 +3,19 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-from app.serializers import MomentSerializer, CommentSerializer, LikeOnCommentSerializer, LikeOnMomentSerializer, SubscriptionSerializer, TagSerializer
-from app.models import Moment, Comment, LikeOnComment, LikeOnMoment, Subscrition, Tag
+from app.serializers import UserSerializer, MomentSerializer, CommentSerializer, LikeOnCommentSerializer, LikeOnMomentSerializer, SubscriptionSerializer, TagSerializer
+from app.models import Moment, Comment, LikeOnComment, LikeOnMoment, Subscrition, Tag, User
+import json
 
+@api_view(['Get'])
+def get_user_id_by_username(request, username, format=None):
+    user = get_object_or_404(User, username=username)
+    #print(json.loads(request.body))
+    if request.method == 'GET':
+        """
+        Возвращает информацию о моменте
+        """
+        return Response(user.id)
 @api_view(['Get'])
 def get_moments_list(request, format=None):
     print(request.user.is_authenticated)
@@ -73,12 +83,22 @@ def get_moments_list_by_owner_id(request, pk, format=None):
     serializer = MomentSerializer(moments, many=True)
     return Response(serializer.data)
 
+@api_view(['Get'])
 def get_comments_list(request, format=None):
     """
     Возвращает список комментариев
     """
     print('get')
     comments = Comment.objects.all()
+    serializer = CommentSerializer(comments, many=True)
+    return Response(serializer.data)
+
+def get_comments_by_moment_id(request, pk, format=None):
+    """
+    Возвращает список комментариев по моменту
+    """
+    print('get')
+    comments = Comment.objects.filter(moment_id=pk)
     serializer = CommentSerializer(comments, many=True)
     return Response(serializer.data)
 
