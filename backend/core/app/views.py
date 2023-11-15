@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-from app.serializers import UserSerializer, MomentSerializer, CommentSerializer, LikeOnCommentSerializer, LikeOnMomentSerializer, SubscriptionSerializer, TagSerializer
+from app.serializers import UserSerializerList, SubscriptionSerializerMinimal, UserSerializer, MomentSerializer, CommentSerializer, LikeOnCommentSerializer, LikeOnMomentSerializer, SubscriptionSerializer, TagSerializer
 from app.models import Moment, Comment, LikeOnComment, LikeOnMoment, Subscrition, Tag, User
 import json
 
@@ -16,6 +16,22 @@ def get_user_id_by_username(request, username, format=None):
         Возвращает информацию о моменте
         """
         return Response(user.id)
+
+@api_view(['Get'])
+def get_subscribers_by_user_id(request, user_id, format=None):
+    #print(json.loads(request.body))
+    if request.method == 'GET':
+        """
+        Возвращает информацию о моменте
+        """
+        print('get')
+        #print(list(map(lambda x: x["subscriber_id"],list(Subscrition.objects.filter(user_id=1).values("subscriber_id")))))
+        users = User.objects.filter(id__in=list(map(lambda x: x["subscriber_id"],list(Subscrition.objects.filter(user_id=user_id).values("subscriber_id")))))
+        serializer = UserSerializerList(users, many=True)
+        return Response(serializer.data)
+
+
+
 @api_view(['Get'])
 def get_moments_list(request, format=None):
     print(request.user.is_authenticated)
@@ -24,6 +40,18 @@ def get_moments_list(request, format=None):
     """
     print('get')
     moments = Moment.objects.all()
+    serializer = MomentSerializer(moments, many=True)
+    return Response(serializer.data)
+
+@api_view(['Get'])
+def get_subscription_moments_list(request, pk, format=None):
+    print(request.user.is_authenticated)
+    """
+    Возвращает список моментов
+    """
+    print('get')
+    moments = Moment.objects.filter(user_id__in=list(
+        map(lambda x: x["user_id"], list(Subscrition.objects.filter(subscriber_id=pk).values("user_id"))))).order_by("pub_date").reverse()
     serializer = MomentSerializer(moments, many=True)
     return Response(serializer.data)
 
@@ -93,6 +121,7 @@ def get_comments_list(request, format=None):
     serializer = CommentSerializer(comments, many=True)
     return Response(serializer.data)
 
+@api_view(['Get'])
 def get_comments_by_moment_id(request, pk, format=None):
     """
     Возвращает список комментариев по моменту
@@ -238,6 +267,17 @@ def get_subscription_list(request, format=None):
     print('get')
     subscriptions = Subscrition.objects.all()
     serializer = SubscriptionSerializer(subscriptions, many=True)
+    return Response(serializer.data)
+
+@api_view(['Get'])
+def get_subscribers_on_by_user_id(request, pk, format=None):
+    """
+    Возвращает список подписок
+    """
+    print('get')
+    users = User.objects.filter(id__in=list(
+        map(lambda x: x["user_id"], list(Subscrition.objects.filter(subscriber_id=pk).values("user_id")))))
+    serializer = UserSerializerList(users, many=True)
     return Response(serializer.data)
 
 @api_view(['Post'])

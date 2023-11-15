@@ -10,6 +10,15 @@ const NavigationBar = () => {
     //    navigate("/profile");
     //}
 
+    const navigate = useNavigate();
+
+    const logoutButtonHandler = (event) => {
+        localStorage.removeItem('user_id');
+        localStorage.removeItem('username');
+        localStorage.removeItem('token');
+        navigate("/")
+    }
+
     return (<div>
         <Navbar bg="dark" expand="sm" variant="dark">
             <Container>
@@ -19,6 +28,7 @@ const NavigationBar = () => {
                     <Nav className="ms-auto">
                         <Nav.Link href="/profile#profile">Профиль</Nav.Link>
                         <Nav.Link href="/feed#feed">Лента</Nav.Link>
+                        <Nav.Link onClick={logoutButtonHandler}>Выйти</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

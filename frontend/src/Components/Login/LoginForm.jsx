@@ -56,7 +56,7 @@ const LoginForm = () => {
     }
 
     return (<div className='wrapper d-flex align-items-center justify-content-center w-100'><div className='login'><div className='form-group' >
-        <h1 className='loginTitle'>Meow</h1>
+        <h1 className='loginTitle'>Myinstagram</h1>
         <form className='mb-3' onSubmit={loginSubmitHandler}>
             <div className='mb-2'>
             <label className='form-label'>Email</label>

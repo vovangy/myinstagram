@@ -44,7 +44,7 @@ function Moment() {
         {momentslist.map((item, index) => (
           <li key={index}>
             <h3>{item.title}</h3>
-            <p>{item.content}</p>
+            <img src="https://images.velog.io/images/beton/post/28ff75c7-ff14-4419-b135-d75068a994f4/react0admin-logo.png"/><p>{item.content}</p>
             <p>Pubdate: {item.pub_date}</p>
           </li>
         ))}

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../Login/LoginForm.css';
+import './RegistrationForm.css';
 
 const RegistrationForm = () => {
     const [email, setEmail] = useState('');
@@ -44,7 +45,7 @@ const RegistrationForm = () => {
     }
 
     return (<div className='wrapper d-flex align-items-center justify-content-center w-100' ><div className='login'><div className='form-group' >
-        <h1 className='loginTittle'>Регистрация</h1>
+        <h2 className='loginTittle registrationTitle'>Регистрация</h2>
         <form className='mb-3   ' onSubmit={loginSubmitHandler}>
             <div className='mb-2'>
             <label className='form-label'>Email</label>

@@ -14,6 +14,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = "__all__"
 
+class UserSerializerList(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "username"]
+
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
@@ -38,6 +43,11 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subscrition
         fields = "__all__"
+
+class SubscriptionSerializerMinimal(serializers.ModelSerializer):
+    class Meta:
+        model = Subscrition
+        fields = ["user_id", "subscriber_id"]
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:

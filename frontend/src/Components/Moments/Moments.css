@@ -1,0 +1,14 @@
+.photo {
+    height: 50%;
+    width: 50%;
+}
+
+.flex-box {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.filler {
+    flex: 1 1 49%;
+    text-align: center;
+}

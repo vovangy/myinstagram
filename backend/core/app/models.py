@@ -6,6 +6,9 @@ from django.contrib.auth.models import AbstractUser, PermissionsMixin, BaseUserM
 
 #Пользователь – электронная почта, никнейм, пароль, аватарка, дата регистрации, рейтинг.
 
+def upload_to(instance, filename):
+    return 'images/{filename}'.format(filename=filename)
+
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, username, password=None):
         if not email:
@@ -35,15 +38,16 @@ class User(AbstractUser, PermissionsMixin):
     REQUIRED_FIELDS = ['username']
     objects = UserAccountManager()
 
-    photo_path = models.CharField(max_length=300, verbose_name="Путь до фото", null=True)
+    image_url = models.ImageField(upload_to=upload_to, blank=True, null=True)
     rating = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Рейтинг", null=True)
     #Пагинация
+
 class Moment(models.Model):
     title = models.CharField(max_length=150)
     content = models.TextField(max_length=5000)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     pub_date = models.DateField(auto_now_add=True)
-    photo_path = models.CharField(max_length=300, verbose_name="Путь до фото", null=True)
+    image_url = models.ImageField(upload_to=upload_to, blank=True, null=True)
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
@@ -78,3 +82,6 @@ class Tag(models.Model):
     title = models.CharField(max_length=50)
     moment_id = models.ForeignKey(Moment, on_delete=models.CASCADE)
     is_deleted = models.BooleanField(default=False)
+
+class Test(models.Model):
+    image_url = models.ImageField(upload_to=upload_to, blank=True, null=True)
