@@ -19,6 +19,10 @@ const NavigationBar = () => {
         navigate("/")
     }
 
+    const profileHandler = () => {
+        localStorage.setItem("profile_id", localStorage.getItem("user_id"));
+    }
+
     return (<div>
         <Navbar bg="dark" expand="sm" variant="dark">
             <Container>
@@ -26,7 +30,7 @@ const NavigationBar = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ms-auto">
-                        <Nav.Link href="/profile#profile">Профиль</Nav.Link>
+                        <Nav.Link href="/profile/" onClick={profileHandler}>Профиль</Nav.Link>
                         <Nav.Link href="/feed#feed">Лента</Nav.Link>
                         <Nav.Link onClick={logoutButtonHandler}>Выйти</Nav.Link>
                     </Nav>

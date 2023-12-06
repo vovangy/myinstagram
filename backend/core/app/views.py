@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-from app.serializers import UserSerializerList, SubscriptionSerializerMinimal, UserSerializer, MomentSerializer, CommentSerializer, LikeOnCommentSerializer, LikeOnMomentSerializer, SubscriptionSerializer, TagSerializer
+from app.serializers import UserSerializerPhoto, UserSerializerList, SubscriptionSerializerMinimal, UserSerializer, MomentSerializer, CommentSerializer, LikeOnCommentSerializer, LikeOnMomentSerializer, SubscriptionSerializer, TagSerializer
 from app.models import Moment, Comment, LikeOnComment, LikeOnMoment, Subscrition, Tag, User
 import json
 
@@ -30,7 +30,16 @@ def get_subscribers_by_user_id(request, user_id, format=None):
         serializer = UserSerializerList(users, many=True)
         return Response(serializer.data)
 
-
+@api_view(['Get'])
+def get_photo_by_user_id(request, user_id, format=None):
+    #print(json.loads(request.body))
+    if request.method == 'GET':
+        """
+        Возвращает информацию о моменте
+        """
+        print('get')
+        user = User.objects.filter(id=user_id)
+        return Response(user.values("image_url"))
 
 @api_view(['Get'])
 def get_moments_list(request, format=None):

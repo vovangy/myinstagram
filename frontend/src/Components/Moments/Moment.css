@@ -23,5 +23,22 @@
     border: 5px solid #888;
     border-radius: 5px;
     margin-bottom: 2%;
-    padding: 2%;
+    padding: 1%;
+  }
+
+  .mywrapper {
+    width: 100pt;
+    height: 100pt;
+    border: 5px solid #515151;
+  }
+  .myexmpl {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .myexmpl img {
+    min-width: 100%;
+    min-height: 100%;
+    flex-shrink: 0;
   }

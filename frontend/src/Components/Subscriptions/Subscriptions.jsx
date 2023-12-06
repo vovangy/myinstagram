@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Subscriptions = (props) => {
 
     const   [subscriptions, setSubscriptions] = useState([])
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}api/subscriptions/user/` + props.userId)
@@ -15,10 +17,14 @@ const Subscriptions = (props) => {
     <h2>Subscription List</h2>
       <ul>
         {subscriptions.map((item, index) => (
-          <li key={index}>
+          <div onClick={() => {
+            localStorage.setItem("profile_id", item.id);
+            window.location.reload();
+          }} key={index}>
+            
             <h3>{item.id}</h3>
             <p>{item.username}</p>
-          </li>
+          </div>
         ))}
       </ul> 
     </div>

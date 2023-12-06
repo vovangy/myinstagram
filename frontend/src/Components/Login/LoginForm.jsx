@@ -39,6 +39,7 @@ const LoginForm = () => {
             const response2 = await axios.get("http://127.0.0.1:8000/api/auth/users/me", {headers: headers,});
             localStorage.setItem('token', JSON.stringify(token));
             localStorage.setItem('user_id', JSON.stringify(response2.data.id));
+            localStorage.setItem('profile_id', JSON.stringify(response2.data.id));
             localStorage.setItem('username', JSON.stringify(response2.data.username));
               //localStorage.setItem('token', JSON.stringify(token));
               //localStorage.getItem('data');
@@ -56,7 +57,7 @@ const LoginForm = () => {
     }
 
     return (<div className='wrapper d-flex align-items-center justify-content-center w-100'><div className='login'><div className='form-group' >
-        <h1 className='loginTitle'>Myinstagram</h1>
+        <h1 className='loginTitle'>-_/-\_-</h1>
         <form className='mb-3' onSubmit={loginSubmitHandler}>
             <div className='mb-2'>
             <label className='form-label'>Email</label>
