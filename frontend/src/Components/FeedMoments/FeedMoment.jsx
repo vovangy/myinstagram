@@ -1,12 +1,11 @@
-import { useState } from 'react'
-import ModalMoment from './ModalMoment/ModalMoment'
-import { Modal } from 'react-bootstrap'
-import './Moment.css'
 import { useEffect } from 'react'
+import { useState } from 'react'
+import ModalMoment from '../Moments/ModalMoment/ModalMoment'
+import UserBadge from '../UserBadge/UserBagde'
+import "./FeedMoment.css"
 
-const Moment = (props) => {
+const FeedMoment = (props) => {
     const [open, setOpen] = useState(false)
-
     const [photo, setPhoto] = useState("")
     const [username, setUsername] = useState("")
 
@@ -19,16 +18,16 @@ const Moment = (props) => {
           .then((response) => response.json())
           .then((jsonData) => {console.log(jsonData);setPhoto('/media/' + jsonData[0].image_url)})
           .catch((error) => console.error('Error fetching data:', error));
-          console.log("Props")
-          console.log(props)
       }, []);
 
     return <div>
     {open && <ModalMoment data={props.data} databadge={{username:username, user_id:props.data.user_id, photo:photo}} close={setOpen}/>}
-        <div className="myexmpl mywrapper filler moment" key={props.index}>
-    <img className="photo" onClick={() => {setOpen(true);console.log(open)}} src={"http://127.0.0.1:8000" + props.data.image_url}/>
+        <div className="photo-item" key={props.index}>
+            {console.log(props)}
+            <div className='badge'><UserBadge nickName={username} id={props.data.user_id} avatarUrl={photo}/></div>
+    <img className="photo-item" onClick={() => {setOpen(true);console.log(open)}} src={props.data.image_url}/>
   </div>
   </div>
 }
 
-export default Moment
+export default FeedMoment

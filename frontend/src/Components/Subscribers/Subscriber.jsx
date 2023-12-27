@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import UserList from "../UsersList/UsersList";
 
 const Subscribers = (props) => {
 
@@ -12,15 +13,8 @@ const Subscribers = (props) => {
       }, []);
 
     return <div>
-    <h2>Subscriber List</h2>
-      <ul>
-        {subscribers.map((item, index) => (
-          <li key={index}>
-            <h3>{item.id}</h3>
-            <p>{item.username}</p>
-          </li>
-        ))}
-      </ul> 
+      <h2>Subscribers List</h2>
+      <UserList users={subscribers} close={props.close}/>
     </div>
 }
 

@@ -10,7 +10,7 @@ const ModalNewMoment = (props) => {
     return <div className='mymodal'>
     <div className='mymodal-content'>
     <span onClick={closeModalNewMoment} className="close">&times;</span>
-          <NewMomentForm />  
+          <NewMomentForm close={closeModalNewMoment}/>  
     </div>
 </div>
 }

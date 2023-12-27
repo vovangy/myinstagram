@@ -1,0 +1,55 @@
+.photo-item {
+    background-color: rgb(214, 214, 214);
+    width: 100%; /* Ширина карточки будет 100% от родительского контейнера */
+    position: relative; /* Для использования псевдоэлемента */
+    margin-bottom: 20px; /* Отступ между карточками */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center; /* Центрирование по вертикали */
+    justify-content: center; /* Центрирование по горизонтали */
+    flex-direction: column;
+  }
+  
+  /* Стили для изображения */
+  .photo-item img {
+    overflow: hidden;
+    max-width: 80%; /* Максимальная ширина изображения будет 100% от ширины карточки */
+    max-height: 400px; /* Максимальная высота изображения будет 100% от высоты карточки */
+    display: block;
+    border-radius: 8px;
+    object-fit: cover; /* Используем этот параметр, чтобы сохранить пропорции изображения и заполнить всю доступную область */
+}
+
+  .user-info {
+    min-height: 50px;
+    display: flex;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Стили для аватара пользователя */
+  .user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  /* Стили для никнейма пользователя */
+  .user-nickname {
+    font-weight: bold;
+  }
+  
+  /* Стили для изображения */
+  .photo-item .photo-image {
+    width: 100%; /* Изображение займет всю ширину карточки */
+    display: block;
+    border-radius: 8px;
+    object-fit: cover; /* Используем этот параметр, чтобы сохранить пропорции изображения и заполнить всю доступную область */
+  }
+
+  .badge {
+    width: 100%;
+  }

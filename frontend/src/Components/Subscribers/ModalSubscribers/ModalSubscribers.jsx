@@ -10,7 +10,7 @@ const ModalSubscribers = (props) => {
     return <div className='mymodal'>
     <div className='mymodal-content'>
     <span onClick={closeModalSubscribersHandler} className="close">&times;</span>
-        <Subscribers userId={props.userId}/>
+        <Subscribers userId={props.userId} close={closeModalSubscribersHandler}/>
     </div>
 </div>
 }

@@ -1,0 +1,12 @@
+.userList {
+    max-height: 100%; /* Set a maximum height for the list */
+    overflow-y: auto; /* Enable vertical scrollbar */
+  }
+
+  .searchList {
+    background-color: #fff;
+  }
+
+  .bodypage {
+    min-height: 100%;
+  }

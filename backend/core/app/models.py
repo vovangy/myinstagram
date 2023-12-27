@@ -40,9 +40,21 @@ class User(AbstractUser, PermissionsMixin):
 
     image_url = models.ImageField(upload_to=upload_to, blank=True, null=True)
     rating = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Рейтинг", null=True)
-    #Пагинация
+
+
+class MomentsManager(models.Manager):
+    def get_my_moments(self, pk):
+        return Moment.objects.filter(user_id=pk, is_deleted = False).order_by('-pub_date')
+    def get_all(self):
+        return Moment.objects.filter(is_deleted = False).order_by('-pub_date')
+    def get_subscriptions(self, sub_users):
+        return Moment.objects.filter(user_id__in=sub_users, is_deleted = False).order_by('-pub_date')
+    def get_count(self, pk):
+        return Moment.objects.filter(user_id = pk).count()
 
 class Moment(models.Model):
+    objects = MomentsManager()
+
     title = models.CharField(max_length=150)
     content = models.TextField(max_length=5000)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)

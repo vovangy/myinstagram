@@ -38,3 +38,141 @@
     text-decoration: none;
     cursor: pointer;
   }
+
+  .parentDiv {
+    width: 100%; /* Ширина родительского div */
+    display: flex; /* Используем flexbox для управления распределением дочерних элементов */
+    max-height: 100%;
+}
+  
+.leftDiv {
+    height: 500px;
+    width: 50%; /* Левый дочерний div занимает 50% ширины родительского div */
+    background-color: #ccc; /* Цвет фона для наглядности */
+    overflow: hidden; /* Обрезание избыточной части изображения */
+    position: relative;  
+}
+
+.momentImg {
+    width: 100%; /* Изображение займет 100% ширины родительского div */
+    height: 100%; /* Изображение займет 100% высоты родительского div */
+    object-fit: contain; /* Обрезает изображение для заполнения всей площади, сохранив пропорции */
+    object-position: center center; /* Располагаем изображение слева div */
+  }
+  
+  .rightDiv {
+    max-height: 500px;
+    width: 50%; /* Правый дочерний div занимает также 50% ширины родительского div */
+    background-color: #f0f0f0; /* Цвет фона для наглядности */
+  }
+
+  .postContainer {
+    height: 100%;
+    width: 100%; /* Ширина контейнера для поста */
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .postContent {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0; /* Позволяет содержимому растягиваться внутри контейнера */
+  }
+  
+  .description {
+    margin-bottom: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  .interactions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto; /* Размещает элементы внизу контейнера */
+  }
+  
+  .likeOffButton {
+    background-color: #626262;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .likeOnButton {
+    background-color: #ff6969;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .likeOnButton:hover {
+    background-color: #2980b9;
+  }
+
+  .likeOffButton:hover {
+    background-color: #2980b9;
+  }
+
+  .likeCount,
+  .publishDate {
+    font-size: 14px;
+  }
+
+  .likeSection {
+    display: flex;
+    align-items: center;
+  }
+
+  .commentsContainer {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .comments {
+    overflow-y: auto;
+    max-height: 240px; /* Фиксированная высота блока комментариев с возможностью прокрутки */
+    margin-bottom: 10px;
+  }
+  
+  .comment {
+    margin-bottom: 5px;
+  }
+  
+  .addComment {
+    display: flex;
+    align-items: center;
+  }
+  
+  .commentInput {
+    flex: 1;
+    padding: 5px;
+    margin-right: 5px;
+  }
+  
+  .commentButton {
+    background-color: #626262;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .commentButton:hover {
+    background-color: #2980b9;
+  }

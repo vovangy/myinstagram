@@ -1,0 +1,9 @@
+.photo-gallery {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .photo-grid {
+    display: flex;
+    flex-direction: column; 
+  }

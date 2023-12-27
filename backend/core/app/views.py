@@ -1,11 +1,30 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
-from rest_framework import status
+from rest_framework import status, viewsets
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from app.serializers import UserSerializerPhoto, UserSerializerList, SubscriptionSerializerMinimal, UserSerializer, MomentSerializer, CommentSerializer, LikeOnCommentSerializer, LikeOnMomentSerializer, SubscriptionSerializer, TagSerializer
 from app.models import Moment, Comment, LikeOnComment, LikeOnMoment, Subscrition, Tag, User
 import json
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializerList
+    def get_queryset(self):
+        username = self.request.query_params.get('username', '')
+        return User.objects.filter(username__icontains=username)
+
+class MomentsViewSet(viewsets.ModelViewSet):
+    serializer_class = MomentSerializer
+    def get_queryset(self):
+        offset = self.request.query_params.get('offset', 0)
+        count = self.request.query_params.get('count', 5)
+        pk = str(self.kwargs.get('pk'))
+        sub_users = User.objects.filter(id__in=list(map(lambda x: x["subscriber_id"],list(Subscrition.objects.filter(user_id=pk, is_deleted=False).values("subscriber_id"))))).values_list("id")
+        moments = Moment.objects.get_subscriptions(list(sub_users))
+        queryset = moments
+        queryset = queryset[int(offset):(int(count)+int(offset))]
+        return queryset
 
 @api_view(['Get'])
 def get_user_id_by_username(request, username, format=None):
@@ -17,6 +36,47 @@ def get_user_id_by_username(request, username, format=None):
         """
         return Response(user.id)
 
+
+@api_view(['Get'])
+def get_is_subscribed(request, user_id, main_user_id, format=None):
+    subscription = Subscrition.objects.filter(user_id=main_user_id, subscriber_id=user_id)
+    if (subscription):
+        if list(subscription)[0].is_deleted == False:
+            return Response(True)
+        else:
+            return Response(False)
+    else:
+        return Response(False)
+
+@api_view(['Get'])
+def get_is_liked(request, user_id, moment_id, format=None):
+    like = LikeOnMoment.objects.filter(user_id=user_id, moment_id=moment_id)
+    if (like):
+        print(like)
+        if list(like)[0].is_deleted == False:
+            return Response(True)
+        else:
+            return Response(False)
+    else:
+        return Response(False)
+
+@api_view(['Get'])
+def get_count_likes(request, moment_id, format=None):
+    like = LikeOnMoment.objects.filter(moment_id=moment_id, is_deleted=False)
+    if (like):
+        return Response(like.count())
+    else:
+        return Response(0)
+@api_view(['Get'])
+def get_username_by_user_id(request, user_id, format=None):
+    print("TUT")
+    user = get_object_or_404(User, id=user_id)
+    if request.method == 'GET':
+        """
+        Возвращает информацию о моменте
+        """
+        return Response(user.username)
+
 @api_view(['Get'])
 def get_subscribers_by_user_id(request, user_id, format=None):
     #print(json.loads(request.body))
@@ -26,7 +86,7 @@ def get_subscribers_by_user_id(request, user_id, format=None):
         """
         print('get')
         #print(list(map(lambda x: x["subscriber_id"],list(Subscrition.objects.filter(user_id=1).values("subscriber_id")))))
-        users = User.objects.filter(id__in=list(map(lambda x: x["subscriber_id"],list(Subscrition.objects.filter(user_id=user_id).values("subscriber_id")))))
+        users = User.objects.filter(id__in=list(map(lambda x: x["subscriber_id"],list(Subscrition.objects.filter(user_id=user_id, is_deleted=False).values("subscriber_id")))))
         serializer = UserSerializerList(users, many=True)
         return Response(serializer.data)
 
@@ -39,7 +99,7 @@ def get_photo_by_user_id(request, user_id, format=None):
         """
         print('get')
         user = User.objects.filter(id=user_id)
-        return Response(user.values("image_url"))
+        return Response(user.values("image_url", "username"))
 
 @api_view(['Get'])
 def get_moments_list(request, format=None):
@@ -116,7 +176,7 @@ def get_moments_list_by_owner_id(request, pk, format=None):
     Возвращает список моментов
     """
     print('get')
-    moments = Moment.objects.filter(user_id=pk)
+    moments = Moment.objects.filter(user_id=pk).order_by("-pub_date")
     serializer = MomentSerializer(moments, many=True)
     return Response(serializer.data)
 
@@ -238,16 +298,25 @@ def get_like_on_moment_list(request, format=None):
 
 @api_view(['Post'])
 def post_like_on_moment(request, format=None):
-    """
-    Добавляет новый лайк на момент
-    """
     print('post')
     print(request.data)
     serializer = LikeOnMomentSerializer(data=request.data)
-    if serializer.is_valid():
+    like = LikeOnMoment.objects.filter(user_id=request.data["user_id"],
+                                              moment_id=request.data["moment_id"])
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif (like):
+        sub = LikeOnMoment.objects.get(id=list(like)[0].id)
+        if sub.is_deleted == False:
+            print("Tut")
+            sub.is_deleted = True
+        else:
+            sub.is_deleted = False
+        sub.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['Get'])
 def get_detail_by_id_like_on_moment(request, pk, format=None):
@@ -297,10 +366,22 @@ def post_subscription(request, format=None):
     print('post')
     print(request.data)
     serializer = SubscriptionSerializer(data=request.data)
-    if serializer.is_valid():
+    subscription = Subscrition.objects.filter(user_id=request.data["user_id"], subscriber_id=request.data["subscriber_id"])
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif (subscription):
+        sub = Subscrition.objects.get(id=list(subscription)[0].id)
+        if sub.is_deleted == False:
+            print("Tut")
+            sub.is_deleted = True
+        else:
+            sub.is_deleted = False
+        sub.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['Get'])
 def get_detail_by_id_subscription(request, pk, format=None):

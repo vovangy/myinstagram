@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import UserList from "../UsersList/UsersList";
+import "./Subscriptions.css"
 
 const Subscriptions = (props) => {
 
@@ -14,19 +16,8 @@ const Subscriptions = (props) => {
       }, []);
 
     return <div>
-    <h2>Subscription List</h2>
-      <ul>
-        {subscriptions.map((item, index) => (
-          <div onClick={() => {
-            localStorage.setItem("profile_id", item.id);
-            window.location.reload();
-          }} key={index}>
-            
-            <h3>{item.id}</h3>
-            <p>{item.username}</p>
-          </div>
-        ))}
-      </ul> 
+      <h2>Subscription List</h2>
+      <UserList users={subscriptions} close={props.close} />
     </div>
 }
 
