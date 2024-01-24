@@ -51,7 +51,7 @@ const NewMomentForm = (props) => {
         <textarea id="content" onChange={contentHandler} name="content" rows="4" required></textarea>
       </div>
       <div class="form-group">
-      <div class="containerTag">
+      {/*  <div class="containerTag">
     <h2>Тэги</h2>
     <div class="buttonTag-container">
       <div class="scrollable-div">
@@ -59,8 +59,8 @@ const NewMomentForm = (props) => {
         <button className='buttonTag'>{tag.title}</button>
         ))}
       </div>
-    </div>
-  </div>
+        </div>
+  </div>*/}
       </div>
       <div class="form-group">
         <label for="file">Выберите файл:</label>

@@ -20,8 +20,9 @@ class MomentsViewSet(viewsets.ModelViewSet):
         offset = self.request.query_params.get('offset', 0)
         count = self.request.query_params.get('count', 5)
         pk = str(self.kwargs.get('pk'))
-        sub_users = User.objects.filter(id__in=list(map(lambda x: x["subscriber_id"],list(Subscrition.objects.filter(user_id=pk, is_deleted=False).values("subscriber_id"))))).values_list("id")
-        moments = Moment.objects.get_subscriptions(list(sub_users))
+        moments = Moment.objects.filter(user_id__in=list(
+            map(lambda x: x["user_id"],
+                list(Subscrition.objects.filter(subscriber_id=pk, is_deleted=False).values("user_id"))))).order_by("pub_date").reverse()
         queryset = moments
         queryset = queryset[int(offset):(int(count)+int(offset))]
         return queryset
@@ -177,7 +178,7 @@ def get_moments_list_by_owner_id(request, pk, format=None):
     """
     print('get')
     moments = Moment.objects.filter(user_id=pk).order_by("-pub_date")
-    serializer = MomentSerializer(moments, many=True)
+    serializer = MomentSerializer(reversed(moments), many=True)
     return Response(serializer.data)
 
 @api_view(['Get'])

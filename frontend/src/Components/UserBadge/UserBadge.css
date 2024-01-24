@@ -1,7 +1,12 @@
 .cnUserBadgeRoot {
+    background-color: #ffffff;
     display: flex;
     cursor: pointer;
-    border: 4mm ridge rgba(211, 220, 50, .6);}
+    border: 2mm inset rgba(108, 108, 108, 0.6);}
+
+.cnUserBadgeRoot:hover {
+    background: rgb(215, 242, 239);
+}
 
 .cnUserBadgeAvatar {
     width: 40px;
